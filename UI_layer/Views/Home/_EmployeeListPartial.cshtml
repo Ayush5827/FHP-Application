@@ -1,0 +1,236 @@
+﻿@* @model List<FHP_VO.cls_EmployeeProp>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th data-column="SerialNo">SNo. <span class="sort-icon" data-column="SerialNo"></span></th>
+            <th data-column="Prefix">Prefix <span class="sort-icon" data-column="Prefix"></span></th>
+            <th data-column="FirstName">First Name <span class="sort-icon" data-column="FirstName"></span></th>
+            <th data-column="MiddleName">Middle Name <span class="sort-icon" data-column="MiddleName"></span></th>
+            <th data-column="LastName">Last Name <span class="sort-icon" data-column="LastName"></span></th>
+            <th>Qualification</th>
+            <th>Current Address</th>
+            <th>Current Company</th>
+            <th>DOB</th>
+            <th>Joining Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.SerialNo</td>
+                <td>@employee.Prefix</td>
+                <td>@employee.FirstName</td>
+                <td>@employee.MiddleName</td>
+                <td>@employee.LastName</td>
+                <td>@employee.Education</td>
+                <td>@employee.CurrentAddress</td>
+                <td>@employee.CurrentCompany</td>
+                <td>@employee.DOB.ToString("dd-MM-yyyy")</td>
+                <td>@employee.JoiningDate.ToString("dd-MM-yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .container {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .nav-list li a {
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        display: inline-block;
+        text-decoration: none;
+        color: #333;
+        background-color: lightskyblue;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .search-bar input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+    .nav-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .nav-list li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+            .nav-list li:last-child {
+                margin-right: 0;
+            }
+
+            .nav-list li a {
+                text-decoration: none;
+                color: #000;
+            }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid grey;
+    }
+
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .data-table th {
+            background-color: brown;
+            color: #fff;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .data-table tr:hover {
+            background-color: #f2f2f2;
+        }
+
+    .sort-icon {
+        display: inline-block;
+        margin-left: 5px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+    }
+
+        .sort-icon.asc {
+            border-bottom: 5px solid #000;
+        }
+
+        .sort-icon.desc {
+            border-top: 5px solid #000;
+        }
+
+</style>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".sort-icon").click(function () {
+                var column = $(this).parent().data("column");
+                var sortOrder = $(this).hasClass("asc") ? "desc" : "asc";
+
+                // Update sort icon
+                $(".sort-icon").removeClass("asc desc");
+                $(this).removeClass("asc desc").addClass(sortOrder);
+
+                // Call the server to get sorted data
+                $.ajax({
+                    url: '@Url.Action("MainPage", "YourControllerName")',
+                    type: 'GET',
+                    data: { sortOrder: sortOrder, sortBy: column },
+                    success: function (result) {
+                        $("tbody").html(result);
+                    }
+                });
+            });
+        });
+    </script>
+}
+ *@
+
+
+@model List<FHP_VO.cls_EmployeeProp>  // Assuming FHP_VO.cls_EmployeeProp is your Employee model class
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>
+                <a href="#" onclick="sort('SNo')">SNo<span class="sort-icon" data-column="SNo"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('Prefix')">Prefix<span class="sort-icon" data-column="Prefix"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('FirstName')">First Name<span class="sort-icon" data-column="FirstName"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('MiddleName')">Middle Name<span class="sort-icon" data-column="MiddleName"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('LastName')">Last Name<span class="sort-icon" data-column="LastName"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('Qualification')">Qualification<span class="sort-icon" data-column="Qualification"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('CurrentAddress')">Current Address<span class="sort-icon" data-column="CurrentAddress"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('CurrentCompany')">Current Company<span class="sort-icon" data-column="CurrentCompany"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('DOB')">DOB<span class="sort-icon" data-column="DOB"></span></a>
+            </th>
+            <th>
+                <a href="#" onclick="sort('JoiningDate')">Joining Date<span class="sort-icon" data-column="JoiningDate"></span></a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td><input type="checkbox" name="selectedEmployees" value="@employee.SerialNo" /></td>
+
+                @* <td>@employee.SerialNo</td> *@
+                <td>@employee.Prefix</td>
+                <td>@employee.FirstName</td>
+                <td>@employee.MiddleName</td>
+                <td>@employee.LastName</td>
+                <td>@employee.Education</td>
+                <td>@employee.CurrentAddress</td>
+                <td>@employee.CurrentCompany</td>
+                <td>@employee.DOB.ToString("dd-MM-yyyy")</td>
+                <td>@employee.JoiningDate.ToString("dd-MM-yyyy")</td>
+
+                <td>
+                    <a href="@Url.Action("EditDetails", "Home", new { id = employee.SerialNo })">UpDate</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

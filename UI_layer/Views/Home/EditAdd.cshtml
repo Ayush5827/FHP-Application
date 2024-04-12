@@ -1,0 +1,287 @@
+﻿@*
+
+@{
+    ViewData["Title"] = "Employee Form";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/StyleSheets/FHPFormsStyles/EditStyle.css">
+</head>
+<body>
+    <h2>Employee Information</h2>
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+
+    <form method="post" action="@Url.Action("EditAdd", "Home")">
+        <div class="form-group" >
+            <label for="sno">SNo.:</label>
+            <input type="text" id="sno" name="sno">
+        </div>
+        <div class="form-group">
+            <label for="prefix">Prefix:</label>
+            <input type="text" id="prefix" name="prefix">
+        </div>
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName">
+        </div>
+        <div class="form-group">
+            <label for="middleName">Middle Name:</label>
+            <input type="text" id="middleName" name="middleName">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName">
+        </div>
+        <div class="form-group">
+            <label for="qualification">Qualification:</label>
+            <input type="text" id="qualification" name="qualification">
+        </div>
+        <div class="form-group">
+            <label for="currentAddress">Current Address:</label>
+            <input type="text" id="currentAddress" name="currentAddress">
+        </div>
+        <div class="form-group">
+            <label for="currentCompany">Current Company:</label>
+            <input type="text" id="currentCompany" name="currentCompany">
+        </div>
+        <div class="form-group">
+            <label for="dob">DOB:</label>
+            <input type="date" id="dob" name="dob">
+        </div>
+        <div class="form-group">
+            <label for="joiningDate">Joining Date:</label>
+            <input type="date" id="joiningDate" name="joiningDate">
+        </div>
+        <div class="form-buttons">
+            <button type="button" name="action" value="Add">Add</button>
+            <button type="button">Edit</button>
+            <button type="button">Clear</button>
+        </div>
+    </form>
+</body>
+</html>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #ccc;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"] {
+            width: calc(100% - 160px);
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+    .form-buttons {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+        .form-buttons button {
+            padding: 8px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+            .form-buttons button:hover {
+                background-color: #0056b3;
+            }
+</style>
+*@
+
+
+ @model FHP_VO.cls_EmployeeProp
+
+@{
+    ViewBag.Title = "Employee Form";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/StyleSheets/FHPFormsStyles/EditStyle.css">
+</head>
+<body>
+    <h2>Add Employee</h2>
+
+   @*  @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success">
+            @ViewBag.SuccessMessage
+        </div>
+    } *@
+
+    <form asp-action="EditAdd" asp-route-action="Add" method="post">
+        <!-- Your form fields here -->
+        <div class="form-group">
+            <label asp-for="SerialNo"></label>
+            <input asp-for="SerialNo" class="form-control" />
+            <span asp-validation-for="SerialNo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Prefix"></label>
+            <input asp-for="Prefix" class="form-control" />
+            <span asp-validation-for="Prefix" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MiddleName"></label>
+            <input asp-for="MiddleName" class="form-control" />
+            <span asp-validation-for="MiddleName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Education"></label>
+            <input asp-for="Education" class="form-control" />
+            <span asp-validation-for="Education" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CurrentAddress"></label>
+            <input asp-for="CurrentAddress" class="form-control" />
+            <span asp-validation-for="CurrentAddress" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CurrentCompany"></label>
+            <input asp-for="CurrentCompany" class="form-control" />
+            <span asp-validation-for="CurrentCompany" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DOB"></label>
+            <input asp-for="DOB" type="date" class="form-control" />
+            <span asp-validation-for="DOB" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="JoiningDate"></label>
+            <input asp-for="JoiningDate" type="date" class="form-control" />
+            <span asp-validation-for="JoiningDate" class="text-danger"></span>
+        </div>
+
+        @*<button type="submit" name="action" value="Add">Add</button>*@
+
+        <div class="form-buttons">
+            <button type="submit" name="action" value="Add">Add</button>
+            <button type="submit">Edit</button>
+            <button type="submit">Clear</button>
+        </div>
+    </form>
+
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #ccc;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: flex;
+                width: 150px;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="date"] {
+                width: calc(100% - 160px);
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+            }
+
+        .form-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .form-buttons button {
+                padding: 8px 20px;
+                margin-left: 10px;
+                border: none;
+                border-radius: 3px;
+                background-color: #007bff;
+                color: #fff;
+                cursor: pointer;
+            }
+
+                .form-buttons button:hover {
+                    background-color: #0056b3;
+                }
+
+    </style>
+</body>
+</html>

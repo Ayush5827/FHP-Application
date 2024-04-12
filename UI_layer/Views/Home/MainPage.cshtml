@@ -1,0 +1,185 @@
+﻿@model List<FHP_VO.cls_EmployeeProp>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewData["Title"] = "Main Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@*     <link rel="stylesheet" href="~/css/MainPage.css/>
+ *@
+</head>
+<body>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+   
+
+    <div class="container">
+
+        <div class="nav-container">
+            <ul class="nav-list">
+                <li><a href="@Url.Action("EditAdd", "Home")">New</a></li>
+               
+                @* <form id="updateForm" action="@Url.Action("EditDetails", "Home")" method="post">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form> *@
+
+                <li><a href="Edit.html">View</a></li>
+
+                 <li><a href="#">Delete</a></li>
+                <li><a href= "@Url.Action("AboutUs","Home")">About Us</a></li>
+            </ul>
+        </div>
+
+        <h2> Employee Details   </h2>
+
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search..." />
+                <button onclick="searchEmployees()">Search</button>
+            </div>
+     
+
+    
+ 
+      
+
+        <div id="employeeTable">
+            @Html.Partial("_EmployeeListPartial", Model)
+        </div>
+    </div>
+
+
+
+
+    @section Scripts {
+        <script>
+            function searchEmployees() {
+                var searchString = $("#searchInput").val();
+
+                // Fetch filtered data using AJAX
+                $.ajax({
+                    url: "/Home/MainPage",
+                    type: "GET",
+                    data: { searchString: searchString },
+                    success: function (data) {
+                        // Update the partial view with filtered data
+                        $("#employeeTable").html($(data).find("#employeeTable").html());
+                    },
+                    error: function () {
+                        alert("An error occurred while searching.");
+                    }
+                });
+            }
+
+            function sort(columnName) {
+                console.log("Sort function called for column:", columnName);
+
+                var sortOrderParam = $("#" + columnName + "SortParam").val();
+
+                // Determine the new sort order
+                var newSortOrder;
+                if (sortOrderParam === "") {
+                    newSortOrder = columnName;
+                } else {
+                    newSortOrder = sortOrderParam;
+                }
+
+                // Fetch sorted data using AJAX
+                $.ajax({
+                    url: "/Home/MainPage",
+                    type: "GET",
+                    data: { sortOrder: newSortOrder, sortBy: columnName },
+                    success: function (data) {
+                        // Update the partial view with sorted data
+                        $("#employeeTable").html($(data).find("#employeeTable").html());
+                        // Update the sort parameters
+                        updateSortParams(columnName);
+                    },
+                    error: function () {
+                        alert("An error occurred while sorting.");
+                    }
+                });
+            }
+
+            function updateSortParams(columnName) {
+                // Reset all sort parameters
+                $(".sort-icon").removeClass("asc desc").css({ borderLeft: "", borderRight: "", borderTop: "", borderBottom: "" });
+
+                // Set sort icon for the specified column
+                var sortOrder = $("#" + columnName + "SortParam").val();
+                if (sortOrder === columnName) {
+                    $(".sort-icon[data-column='" + columnName + "']").addClass("asc").css({ borderBottom: "5px solid #000" });
+                } else if (sortOrder === columnName + "_desc") {
+                    $(".sort-icon[data-column='" + columnName + "']").addClass("desc").css({ borderTop: "5px solid #000" });
+                }
+            }
+        </script>
+    }
+</body>
+</html>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Handle delete button click
+            $('#deleteSelected').click(function () {
+                var selectedIds = [];
+
+                // Get IDs of selected checkboxes
+                $('.employee-checkbox:checked').each(function () {
+                    selectedIds.push($(this).data('id'));
+                });
+
+                if (selectedIds.length === 0) {
+                    alert('Please select at least one employee to delete.');
+                    return;
+                }
+
+                // Send AJAX request to delete selected employees
+                $.ajax({
+                    url: '/Home/DeleteEmployees',
+                    type: 'POST',
+                    data: { ids: selectedIds },
+                    success: function (response) {
+                        if (response.success) {
+                            // Remove deleted rows from table
+                            $('.employee-checkbox:checked').closest('tr').remove();
+                        } else {
+                            alert('Error deleting employees.');
+                        }
+                    },
+                    error: function () {
+                        alert('Error deleting employees.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
